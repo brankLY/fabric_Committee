@@ -10,22 +10,13 @@ const ProposalHandler = require('./lib/handler/ProposalHandler');
 
 class Chaincode {
   async Init(stub) {
-    logger.debug('############## Init Start ##############');
-    const method = 'init';
-    logger.enter(method);
-    const { params } = stub.getFunctionAndParameters();
-    logger.debug('%s - call Init with params %j', method, params);
-    try {
-      if (params[0] === 'upgrade') {
-        logger.info('Successfully upgrade chaincode');
-        return Response(true, 'Success Updated');
-      }
-      logger.debug('Successfully Init');
-      logger.exit(method);
-      return Response(true, 'Success Init'));
-    } catch (e) {
-      return Response(false, e.message);
-    }
+    logger.debug('######## Init ########');
+    const {
+      fcn,
+      params,
+    } = stub.getFunctionAndParameters();
+    logger.debug('Init with fcn:%s and params:%j', fcn, params);
+    return shim.success();
   }
 
   async Invoke(stub) {
