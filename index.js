@@ -38,6 +38,7 @@ class Chaincode {
       default:
         return shim.error(Buffer.from(`${fcn} is not a valid function name`));
     }
+    return shim.success();
   }
 }
 
