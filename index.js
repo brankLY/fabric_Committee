@@ -28,6 +28,7 @@ class Chaincode {
     logger.debug('Invoke with fcn:%s and params:%j', fcn, params);
     switch (fcn) {
       case 'committee.init':
+        logger.debug('6666');
         return CommitteeHandler.Init(stub, params);
       case 'member.init':
         return MemberHandler.Init(stub, params);
@@ -38,7 +39,7 @@ class Chaincode {
       default:
         return shim.error(Buffer.from(`${fcn} is not a valid function name`));
     }
-    return shim.success();
+    // return shim.success();
   }
 }
 
