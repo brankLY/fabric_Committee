@@ -35,7 +35,8 @@
     "iconv-lite": "^0.4.23",
     "jsrsasign": "8.0.12",
     "mathjs": "4.4.1",
-    "winston": "2.4.2"
+    "winston": "2.4.2",
+    "uuid": "^3.0.1"
   },
   "nyc": {
     "exclude": [
