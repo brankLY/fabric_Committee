@@ -35,6 +35,8 @@ class Chaincode {
         return ProposalHandler.Create(stub, params);
       case 'proposal.vote':
         return ProposalHandler.Vote(stub, params);
+      case 'proposal.query':
+        return ProposalHandler.Query(stub, params);
       default:
         return shim.error(Buffer.from(`${fcn} is not a valid function name`));
     }
