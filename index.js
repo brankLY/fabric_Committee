@@ -31,6 +31,8 @@ class Chaincode {
         return CommitteeHandler.Init(stub, params);
       case 'member.init':
         return MemberHandler.Init(stub, params);
+      case 'member.getall':
+        return MemberHandler.GetAll(stub, params);
       case 'proposal.create':
         return ProposalHandler.Create(stub, params);
       case 'proposal.vote':
