@@ -23,6 +23,7 @@ class Runtime {
     this.stub.setCtx(ctx);
 
     const response = await handler(this.stub, params);
+    logger.debug('response is %j',response);
     if (response.status === 500) {
       response.message = response.message.toString('utf8');
     } else if (response.status === 200) {

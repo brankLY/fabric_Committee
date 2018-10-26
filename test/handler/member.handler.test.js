@@ -4,11 +4,17 @@ const logger = require('../../lib/utils/Logger').getLogger('MemberHandler');
 const chai = require('chai');
 const chaiPromised = require('chai-as-promised');
 
+const Stub = require('../mock-stub');
+const { expect } = require('chai');
+
+const stub = new Stub();
+
 chai.use(chaiPromised);
 chai.should();
 
 describe('Test Member', () => {
   let runtime;
+  let resp;
   const member = {
     member1: "11111",
     member2: '21111',
@@ -43,10 +49,6 @@ describe('Test Member', () => {
     await runtime.stop();
   });
 
-
-  describe('Init()', () => {
-    const handler = MemberHandler.Init;
-    let req;
 
 //     it('missing params should response error', async () => {
 //       const resp = await runtime.invoke(handler);
@@ -87,27 +89,32 @@ describe('Test Member', () => {
 //   //     resp.message.should.eql('Account with id admin already exists');
 //   //   });
 
-    it('success', async () => {
-      runtime.stub.setUserCtx(cert);
-      req = {
-        'member1': member.member1,
-        'member2': member.member2,
-        'member3': member.member3,
-        'member4': member.member4,
-        'member5': member.member5,
-      };
-      const resp = await runtime.invoke(handler, [JSON.stringify(req)]);
-      // resp.status.should.eql(200);
-      resp.payload = JSON.parse(resp.payload);
-      resp.payload[0].id.should.equal(member.member1);
-      resp.payload[1].id.should.equal(member.member2);
-      resp.payload[2].id.should.equal(member.member3);
-      resp.payload[3].id.should.equal(member.member4);
-      resp.payload[4].id.should.equal(member.member5);
-      runtime.stub.cleanUserCtx();
-    });
-  });
+  //   it('success', async () => {
+  //     runtime.stub.setUserCtx(cert);
+  //     req = {
+  //       member1: 'rew',
+  //       member2: 'member.member2',
+  //       member3: 'member.member3',
+  //       member4: 'member.member4',
+  //       member5: 'member.member5',
+  //     };
+  //     const resp = await runtime.invoke(handler, [JSON.stringify(req)]);
+  //     resp.status.should.eql(200);
+  //   });
+  // });
 
+  // it('Create new User with CreateUserOption should success', async () => {
+  //   const opts = {
+  //       member1: 'rew',
+  //       member2: 'member.member2',
+  //       member3: 'member.member3',
+  //       member4: 'member.member4',
+  //       member5: 'member.member5',
+  //   };
+  //   const resp = await MemberHandler.Init(stub, opts);
+  //   expect(resp.status).to.equal(200);
+  //   expect(resp.payload).to.equal(opts.member1);
+  // });
 //   // describe('GetAccountInfo() can retrieve the basic info of an account', () => {
 //   //   const handler = AccountHandler.GetAccountInfo;
 
@@ -120,7 +127,21 @@ describe('Test Member', () => {
 //   //     resp.payload.role.should.equal('admin');
 //   //   });
 //   // });
+  // it('getall should success', async () => {
+  //   const resp = await MemberHandler.GetAll(stub);
+  //   expect(resp.status).to.equal(200);
+  //   expect(resp.payload).to.equal(opts.member1);
+  // });
 
+  describe('GetAccountInfo() can retrieve the basic info of an account', () => {
+    const handler = MemberHandler.GetAll;
+
+    it('getAccountInfo should success', async () => {
+      const resp = await runtime.invoke(handler, []);
+      resp.status.should.eql(200);
+      resp.payload = JSON.parse(resp.payload);
+    });
+  });
 //   // describe('GetAccount() can retrieve the detail info of an account', () => {
 //   //   it('', () => {
 

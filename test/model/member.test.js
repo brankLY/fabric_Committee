@@ -1,20 +1,24 @@
-/* eslint-disable no-unused-expressions */
-const Stub = require('../mock-stub');
-const { expect } = require('chai');
+/* eslint-disable no-new */
+const Member = require('../../lib/model/Member');
+const chai = require('chai');
+const chaiPromised = require('chai-as-promised');
+const MockStub = require('../mock-stub');
+const sinon = require('sinon');
+const ChaincodeStub = require('./stub');
+const Context = require('./context');
 const Runtime = require('../pouchdb-runtime/runtime-pouchdb');
 
-const stub = new Stub();
 
-const Member = require('../../lib/model/Member');
+const stub = new ChaincodeStub();
 
-describe('Test Member', () => {
+chai.use(chaiPromised);
+const should = chai.should();
+
+describe('Unit Test For Member', () => {
+  const newstub = new MockStub();
   let runtime;
-  const target = {
-    id: '9ec73604-0225-4d99-83d7-b858b499e639',
-    name: 'user0',
-    role: 'user',
-  };
-  // cert for target user {{{
+  runtime = new Runtime();
+  
   const cert = '-----BEGIN CERTIFICATE-----\n' +
     'MIICwDCCAmagAwIBAgIUMdfKxK9vzQMDyfn6wtOJunKqtMMwCgYIKoZIzj0EAwIw\n' +
     'czELMAkGA1UEBhMCVVMxEzARBgNVBAgTCkNhbGlmb3JuaWExFjAUBgNVBAcTDVNh\n' +
@@ -32,101 +36,40 @@ describe('Test Member', () => {
     'BggqhkjOPQQDAgNIADBFAiEAwGbq0Z7wqTQm/vG2TU4y1IniWHhoitqLzW81+IOH\n' +
     'd+ACIACp77nySZ2j8JrY5MEDXrTd3ua+hOdAoAwARDp6e2ug\n' +
     '-----END CERTIFICATE-----\n';
-  // }}}
 
-  before(async () => {
-    await stub.reset();
-    runtime = new Runtime();
+  describe('Test Member', () => {
+    it('Member without stub should throw error', () => {
+      should.throw(() => {
+        new Member();
+      }, /Missing Required Argument stub/);
+    });
+
+    it('construct with stub should success', () => {
+      should.not.throw(() => {
+        new Member(stub);
+      });
+    });
   });
-
-  after(async () => {
-    await runtime.stop();
+  
+  describe('Test create()', () => {
+    it('Call create should return the serialized model', async () => {
+      const ctx = new Context(runtime.db);
+      runtime.stub.setCtx(ctx);
+      let member = new Member(runtime.stub);
+      req = {
+        id:'abcdefg',
+      }
+      const res = await member.create(req);
+      res.should.eql(true);
+    });
   });
-  // Constructor Test {{{
-  it('Constructor Test', () => {
-    try {
-      // eslint-disable-next-line no-new
-      new Member(stub);
-    } catch (e) {
-      expect(e.message).to.equal('Missing Required Argument stub');
-    }
-  });
-  // }}}
-
-  // Create new User without correct CreateUserOption should throw error {{{
-  // it('Create new User without correct CreateUserOption should throw error', async () => {
-  //   stub.setUserCtx(cert);
-  //   try {
-  //     const member = new Member(stub);
-  //     await member.create(stub);
-  //     throw new Error('Test Failed');
-  //   } catch (e) {
-  //     expect(e.message).to.equal('Missing Required param options or options is not a valid object');
-  //   }
-
-  //   try {
-  //     const member = new Member(stub);
-  //     await member.create(stub, 'dummy');
-  //     throw new Error('Test Failed');
-  //   } catch (e) {
-  //     expect(e.message).to.equal('Missing Required param options or options is not a valid object');
-  //   }
-
-  //   try {
-  //     const member = new Member(stub);
-  //     await member.create(stub, {});
-  //     throw new Error('Test Failed');
-  //   } catch (e) {
-  //     expect(e.message).to.equal('{} is not a valid CreateUserOption Object, Missing Required property id');
-  //   }
-
-  //   try {
-  //     const member = new Member(stub);
-  //     await member.create(stub, { id: 123 });
-  //     throw new Error('Test Failed');
-  //   } catch (e) {
-  //     expect(e.message).to.equal('123 is not a valid string for CreateUserOption.id');
-  //   }
+  // describe('Test GetValidity()', () => {
+  //   it('Call GetValidity should return the serialized model', () => {
+  //     let member = new Member(stub);
+  //     member = member.GetValidity(stub);
+  //     const res = member;
+  //     res.should.eql(true);
+  //   });
   // });
-  // }}}
 
-  // Create new User with CreateUserOption should success {{{
-  // it('Create new User with CreateUserOption should success', async () => {
-  //   runtime.stub.setUserCtx(cert);
-  //   const opts = {
-  //     id: 'zhangsan',
-  //   };
-  //   let member = new Member(stub);
-  //   member = await member.create(opts);
-
-  //   expect(member).exist;
-  //   expect(member.id).to.equal(opts.id);
-  //   expect(member.validity).to.equal(true);
-  // });
-  // }}}
-
-  // // Create new User with a wrong id should throw error {{{
-  // it('Create new User with a wrong id should throw error', async () => {
-  //   try {
-  //     const opts = {
-  //       id: 'user0',
-  //       name: 'zhangsan',
-  //       role: 'user',
-  //     };
-  //     await User.Create(stub, opts);
-  //     expect.fail();
-  //   } catch (e) {
-  //     expect(e.message).to.equal('Identity admin do not have permission to create new User user0');
-  //   }
-  // });
-  // // }}}
-
-  // Test exists {{{
-  it('Test exists', async () => {
-    let member = new Member(stub);
-    let res = await member.exists('admin');
-    expect(res).to.equal(false);
-  });
-  // }}}
-  // }}}
 });
