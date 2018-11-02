@@ -30,7 +30,6 @@ class Runtime {
       response.payload = response.payload.toString('utf8');
       await ctx.commit();
     }
-
     return response;
   }
 

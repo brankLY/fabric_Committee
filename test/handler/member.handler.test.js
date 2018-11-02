@@ -1,6 +1,5 @@
 const MemberHandler = require('../../lib/handler/MemberHandler');
 const Runtime = require('../pouchdb-runtime/runtime-pouchdb');
-const logger = require('../../lib/utils/Logger').getLogger('MemberHandler');
 const chai = require('chai');
 const chaiPromised = require('chai-as-promised');
 
@@ -50,119 +49,36 @@ describe('Test Member', () => {
   });
 
 
-//     it('missing params should response error', async () => {
-//       const resp = await runtime.invoke(handler);
-//       resp.status.should.eql(500);
-//       resp.message.should.eql('Create new Account requires params');
-//     });
+describe('Create()', () => {
+    const handler = MemberHandler.Init;
+    let req;
 
-//     it('wrong params length should response error', async () => {
-//       const resp = await runtime.invoke(handler, ['1', '2','3','4','5']);
-//       resp.status.should.eql(500);
-//       resp.message.should.eql('Create new Account requires params of length 1');
-//     });
+    it('missing params should response error', async () => {
+      const resp = await runtime.invoke(handler);
+      resp.status.should.eql(500);
+      resp.message.should.eql('init Members requires params');
+    });
 
-//     it('dummy identity do not have permission to create a member', async () => {
-//       req = {
-//         member1: "11111",
-//         member2: '21111',
-//         member3: '31111',
-//         member4: '41111',
-//         member5: '51111',
-//       };
-//       const resp = await runtime.invoke(handler, [JSON.stringify(req)]);
-//       resp.status.should.eql(500);
-//       resp.message.should.eql('Identity admin do not have permission to create new User 123');
-//     });
-
-
-//   //   it('create an account with a id that already exists should throw error', async () => {
-//   //     req = {
-//   //       member1: "1",
-//   //       member2: '2',
-//   //       member3: '3',
-//   //       member4: '4',
-//   //       member5: '5',
-//   //     };
-//   //     const resp = await runtime.invoke(handler, [JSON.stringify(req)]);
-//   //     resp.status.should.eql(500);
-//   //     resp.message.should.eql('Account with id admin already exists');
-//   //   });
-
-  //   it('success', async () => {
-  //     runtime.stub.setUserCtx(cert);
-  //     req = {
-  //       member1: 'rew',
-  //       member2: 'member.member2',
-  //       member3: 'member.member3',
-  //       member4: 'member.member4',
-  //       member5: 'member.member5',
-  //     };
-  //     const resp = await runtime.invoke(handler, [JSON.stringify(req)]);
-  //     resp.status.should.eql(200);
-  //   });
-  // });
-
-  // it('Create new User with CreateUserOption should success', async () => {
-  //   const opts = {
-  //       member1: 'rew',
-  //       member2: 'member.member2',
-  //       member3: 'member.member3',
-  //       member4: 'member.member4',
-  //       member5: 'member.member5',
-  //   };
-  //   const resp = await MemberHandler.Init(stub, opts);
-  //   expect(resp.status).to.equal(200);
-  //   expect(resp.payload).to.equal(opts.member1);
-  // });
-//   // describe('GetAccountInfo() can retrieve the basic info of an account', () => {
-//   //   const handler = AccountHandler.GetAccountInfo;
-
-//   //   it('getAccountInfo should success', async () => {
-//   //     const resp = await runtime.invoke(handler, []);
-//   //     resp.status.should.eql(200);
-//   //     resp.payload = JSON.parse(resp.payload);
-//   //     resp.payload.id.should.equal('admin');
-//   //     resp.payload.name.should.equal('Earth BlockChain Bootstrap User');
-//   //     resp.payload.role.should.equal('admin');
-//   //   });
-//   // });
-  // it('getall should success', async () => {
-  //   const resp = await MemberHandler.GetAll(stub);
-  //   expect(resp.status).to.equal(200);
-  //   expect(resp.payload).to.equal(opts.member1);
-  // });
-
-  describe('GetAccountInfo() can retrieve the basic info of an account', () => {
-    const handler = MemberHandler.GetAll;
-
-    it('getAccountInfo should success', async () => {
-      const resp = await runtime.invoke(handler, []);
-      resp.status.should.eql(200);
-      resp.payload = JSON.parse(resp.payload);
+    it('wrong params length should response error', async () => {
+      const resp = await runtime.invoke(handler, ['123', 'zhangsan']);
+      resp.status.should.eql(500);
+      resp.message.should.eql('Init Committee members required params of length 1');
     });
   });
-//   // describe('GetAccount() can retrieve the detail info of an account', () => {
-//   //   it('', () => {
 
-//   //   });
-//   // });
+  describe('GetAll() can return the basic info of members', () => {
+    const handler = MemberHandler.GetAll;
 
-//   // describe('Admin Account can update another account to admin', () => {
-//   //   const handler = AccountHandler.UpdateAccount;
-//   //   let resp;
+    it('GetAll without members should response error', async () => {
+      runtime.stub.setUserCtx(cert);
+      const resp = await runtime.invoke(handler, []);
+      resp.status.should.eql(500);
+    });
+    it('GetAll Members requires params 0', async () => {
+      const resp = await runtime.invoke(handler, ['123', 'zhangsan']);
+      resp.status.should.eql(500);
+      resp.message.should.eql('GetAll Members requires params 0');
+    });
+  });
 
-//   //   it('Success update account', async () => {
-//   //     resp = await runtime.invoke(handler, [user.id]);
-//   //     resp.status.should.eql(200);
-
-//   //     const { GetAccountInfo } = AccountHandler;
-//   //     runtime.stub.setUserCtx(cert);
-//   //     resp = await runtime.invoke(GetAccountInfo, []);
-//   //     resp.status.should.eql(200);
-//   //     resp.payload = JSON.parse(resp.payload);
-//   //     resp.payload.role.should.eql('admin');
-//   //     runtime.stub.cleanUserCtx();
-//   //   });
-//   // });
 });

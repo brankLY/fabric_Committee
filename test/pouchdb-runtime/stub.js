@@ -1,6 +1,5 @@
 /* eslint-disable prefer-destructuring,class-methods-use-this */
 const logger = require('../../lib/utils/Logger').getLogger('ChaincodeStub');
-const shim = require('fabric-shim');
 
 class ChaincodeStub {
   setCtx(ctx) {
@@ -25,10 +24,6 @@ class ChaincodeStub {
     }
     this.ctx.handlePutState(key, v);
   }
-
-  // async invokeChaincode(chaincodeName, args, channel) {
-  //   return shim.stub.invokeChaincode(chaincodeName, args, channel);
-  // }
 
   async getState(key) {
     return this.ctx.handleGetState(key);
@@ -94,5 +89,5 @@ class ChaincodeStub {
     this.user = null;
   }
 }
-shim.start(new Chaincode());
+
 module.exports = ChaincodeStub;

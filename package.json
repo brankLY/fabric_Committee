@@ -4,7 +4,7 @@
   "description": "Chaincode for GZH management",
   "main": "index.js",
   "scripts": {
-    "test": "EARTH_LOGGING_LEVEL=none nyc mocha test/**/*.test.js",
+    "test": "GZHCOMMITTEE_LOGGING_LEVEL=none nyc mocha test/**/*.test.js",
     "doc": "jsdoc -c conf/jsdoc.json",
     "start": "node index.js",
     "lint": "eslint lib"
