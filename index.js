@@ -33,14 +33,20 @@ class Chaincode {
         return MemberHandler.Init(stub, params);
       case 'member.getall':
         return MemberHandler.GetAll(stub, params);
-      case 'proposal.create':
-        return ProposalHandler.Create(stub, params);
-      case 'proposal.vote':
-        return ProposalHandler.Vote(stub, params);
+      case 'proposal.createTx':
+        return ProposalHandler.CreateTx(stub, params);
+      case 'proposal.createMem':
+        return ProposalHandler.CreateMem(stub, params);
+      case 'proposal.voteTx':
+        return ProposalHandler.VoteTx(stub, params);
+      case 'proposal.voteMem':
+        return ProposalHandler.VoteMem(stub, params);
       case 'proposal.query':
         return ProposalHandler.Query(stub, params);
-      case 'proposal.getall':
-        return ProposalHandler.GetAll(stub, params);  
+      case 'proposal.getTxAll':
+        return ProposalHandler.GetTxProposals(stub, params);
+      case 'proposal.getMemAll':
+        return ProposalHandler.GetMemProposals(stub, params);  
       default:
         return shim.error(Buffer.from(`${fcn} is not a valid function name`));
     }
