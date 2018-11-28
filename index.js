@@ -33,6 +33,8 @@ class Chaincode {
         return MemberHandler.Init(stub, params);
       case 'member.getall':
         return MemberHandler.GetAll(stub, params);
+      case 'member.checkValidity':
+        return MemberHandler.CheckValidity(stub, params);
       case 'proposal.createTx':
         return ProposalHandler.CreateTx(stub, params);
       case 'proposal.createMem':
